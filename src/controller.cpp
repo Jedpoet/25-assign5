@@ -13,7 +13,7 @@ Controller::Controller(View &view) : _view(view) {
 	factory.creat_object(1);
 	factory.creat_object(2);
 	factory.creat_object(2);
-	_objs = *factory.get_objs();
+	_objs = factory.get_objs();
 }
 
 void Controller::run() {
