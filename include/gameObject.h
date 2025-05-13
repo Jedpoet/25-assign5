@@ -11,6 +11,7 @@ class GameObject {
 	Position getPosition() const;
 	Icon getIcon() const;
 	virtual void update(int next_step);
+	virtual ~GameObject(){};
 
   protected:
 	GameObject();

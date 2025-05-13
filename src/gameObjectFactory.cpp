@@ -4,6 +4,7 @@
 #include "iconFactory.h"
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 Player::Player() : GameObject() {
 	srand(time(NULL));
@@ -48,4 +49,8 @@ void GameObjectFactory::creat_object(int type) {
 	else {
 		add_object(new Block());
 	}
+}
+
+std::vector<GameObject *> GameObjectFactory::get_objs() {
+	return objs;
 }
