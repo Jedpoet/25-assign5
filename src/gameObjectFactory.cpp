@@ -7,7 +7,6 @@
 #include <vector>
 
 Player::Player() : GameObject() {
-	srand(time(NULL));
 	_pos = {rand() % (GAME_WINDOW_WIDTH - 2),
 	        rand() % (GAME_WINDOW_HEIGHT - 2)};
 	IconFactory factory = IconFactory();
@@ -32,7 +31,6 @@ void Player::update(int next_step) {
 }
 
 Block::Block() : GameObject() {
-	srand(time(NULL));
 	_pos = {rand() % (GAME_WINDOW_WIDTH - 3),
 	        rand() % (GAME_WINDOW_HEIGHT - 3)};
 	IconFactory factory = IconFactory();
