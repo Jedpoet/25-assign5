@@ -51,6 +51,10 @@ void GameObjectFactory::creat_object(int type) {
 	}
 }
 
+void GameObjectFactory::add_object(GameObject *obj) {
+	objs.push_back(obj);
+}
+
 std::vector<GameObject *> GameObjectFactory::get_objs() {
 	return objs;
 }

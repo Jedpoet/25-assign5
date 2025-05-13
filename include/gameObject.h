@@ -10,8 +10,8 @@ class GameObject {
   public:
 	Position getPosition() const;
 	Icon getIcon() const;
-	virtual void update(int next_step);
-	virtual ~GameObject(){};
+	virtual void update(int next_step) = 0;
+	virtual ~GameObject() = 0;
 
   protected:
 	GameObject();

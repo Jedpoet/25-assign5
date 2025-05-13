@@ -18,11 +18,11 @@ class Block : public GameObject {
 	void update(int next_step);
 };
 
-class GameObjectFactory : public Player, public Block, GameObject {
+class GameObjectFactory : public Player, public Block {
   public:
 	GameObjectFactory(){};
 	void creat_object(int type);
-	std::vector<GameObject *> *get_objs();
+	std::vector<GameObject *> get_objs();
 
   private:
 	void add_object(GameObject *obj);

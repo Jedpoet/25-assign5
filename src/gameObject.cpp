@@ -5,6 +5,9 @@
 GameObject::GameObject() {
 }
 
+GameObject::~GameObject() {
+}
+
 Position GameObject::getPosition() const {
 	return _pos;
 }
