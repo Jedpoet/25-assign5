@@ -1,21 +1,23 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
-#include <vector>
-#include "unit.h"
 #include "icon.h"
+#include "unit.h"
 #include <iostream>
-class GameObject{
+#include <vector>
+class GameObject {
 
-public:
+  public:
+	Position getPosition() const;
+	Icon getIcon() const;
+	virtual void update(int next_step);
 
-    Position getPosition() const;
-    Icon getIcon() const;
-    virtual void update();
-protected:
+  protected:
+	GameObject();
 
-    Position _pos;
-    Icon _icon;
+  protected:
+	Position _pos;
+	Icon _icon;
 };
 
 #endif
