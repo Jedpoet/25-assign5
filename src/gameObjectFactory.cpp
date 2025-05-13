@@ -17,16 +17,16 @@ Player::Player() : GameObject() {
 void Player::update(int next_step) {
 	switch ( next_step ) {
 	case 1:
-		_pos.x() += 1;
-		break;
-	case 2:
 		_pos.y() += 1;
 		break;
-	case 3:
+	case 2:
 		_pos.x() -= 1;
 		break;
-	case 4:
+	case 3:
 		_pos.y() -= 1;
+		break;
+	case 4:
+		_pos.x() += 1;
 		break;
 	}
 }

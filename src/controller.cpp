@@ -45,6 +45,7 @@ void Controller::run() {
 
 			_view.updateGameObject(obj);
 		}
+		next_step = 0;
 
 		_view.render();
 
