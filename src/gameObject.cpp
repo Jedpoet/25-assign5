@@ -1,8 +1,9 @@
-// TODO implementation
-
 #include "gameObject.h"
+#include "environment.h"
 
 GameObject::GameObject() {
+	_pos = {rand() % (GAME_WINDOW_WIDTH - 2),
+	        rand() % (GAME_WINDOW_HEIGHT - 2)};
 }
 
 GameObject::~GameObject() {

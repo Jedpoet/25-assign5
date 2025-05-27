@@ -4,16 +4,33 @@
 #include <thread>
 #include <unistd.h>
 
+#include "RPSGameObject.h"
 #include "controller.h"
 #include "environment.h"
-#include "gameObjectFactory.h"
 
 Controller::Controller(View &view) : _view(view) {
-	GameObjectFactory factory;
-	factory.creat_object(1);
-	factory.creat_object(2);
-	factory.creat_object(2);
+	int time = rng.getInt(15, 30);
+	for ( int i = 0; i < time; i++ ) {
+		factory.create_object();
+	}
 	_objs = factory.get_objs();
+
+	for ( auto obj : _objs ) {
+		if ( auto rpsObj = dynamic_cast<RPSGameObject *>(obj) ) {
+			switch ( rng.getInt(1, 3) ) {
+			case 1:
+				rpsObj->setType(RPSType::ROCK);
+				players.push_back(rpsObj);
+				break;
+			case 2:
+				rpsObj->setType(RPSType::SCISSORS);
+				break;
+			case 3:
+				rpsObj->setType(RPSType::PAPER);
+				break;
+			}
+		}
+	}
 }
 
 void Controller::run() {
@@ -41,11 +58,25 @@ void Controller::run() {
 		_view.resetLatest();
 		for ( GameObject *obj : _objs ) {
 
-			obj->update(next_step);
+			obj->update();
 
 			_view.updateGameObject(obj);
 		}
-		next_step = 0;
+
+		// check collision
+		for ( GameObject *obj1 : _objs ) {
+			for ( GameObject *obj2 : _objs ) {
+				auto rpsObj1 = dynamic_cast<RPSGameObject *>(obj1);
+				auto rpsObj2 = dynamic_cast<RPSGameObject *>(obj2);
+				if ( !rpsObj1 || !rpsObj2 || rpsObj1 == rpsObj2 ) {
+					continue;
+				}
+				if ( rpsObj1->intersect(rpsObj2) ) {
+					rpsObj1->onCollision(rpsObj2);
+					rpsObj2->onCollision(rpsObj1);
+				}
+			}
+		}
 
 		_view.render();
 
@@ -68,21 +99,49 @@ void Controller::handleInput(int keyInput) {
 	if ( keyInput == -1 )
 		return;
 
-	// TODO
 	// handle key events.
 	switch ( keyInput ) {
 	case 'w':
-		next_step = 1;
+	case 'k':
+		players[player]->setDirection(Direction::UP);
 		break;
 	case 'a':
-		next_step = 2;
+	case 'h':
+		players[player]->setDirection(Direction::LEFT);
 		break;
 	case 's':
-		next_step = 3;
+	case 'j':
+		players[player]->setDirection(Direction::DOWN);
 		break;
 	case 'd':
-		next_step = 4;
+	case 'l':
+		players[player]->setDirection(Direction::RIGHT);
 		break;
+	case 'q':
+	case 'y':
+		players[player]->setDirection(Direction::TOP_LIFT);
+		break;
+	case 'e':
+	case 'u':
+		players[player]->setDirection(Direction::TOP_RIGHT);
+		break;
+	case 'z':
+	case 'b':
+		players[player]->setDirection(Direction::DOWN_LIFT);
+		break;
+	case 'c':
+	case 'n':
+		players[player]->setDirection(Direction::DOWN_RIGHT);
+		break;
+
+	case 'x':
+	case 'o':
+		player++;
+		if ( player == players.size() ) {
+			player = 0;
+		}
+		break;
+
 	default:
 		break;
 	}

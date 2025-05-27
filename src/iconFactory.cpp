@@ -1,19 +1,26 @@
 #include "iconFactory.h"
+#include "RPSGameObject.h"
 #include "icon.h"
 #include <vector>
 
-Icon *IconFactory::create_icon(int type) const {
+Icon *IconFactory::create_icon(RPSType type) const {
 	Icon *icon = new Icon;
 	std::string block = "█";
-	if ( type == 1 ) {
-		std::vector<Cell> temp(2, Cell(RED, block));
+	if ( type == ROCK ) {
+		std::vector<Cell> temp(1, Cell(GREEN, block));
+		for ( int i = 0; i < 1; i++ ) {
+			icon->push_back(temp);
+		}
+	}
+	else if ( type == SCISSORS ) {
+		std::vector<Cell> temp(1, Cell(RED, block));
 		for ( int i = 0; i < 2; i++ ) {
 			icon->push_back(temp);
 		}
 	}
 	else {
-		std::vector<Cell> temp(3, Cell(BLUE, block));
-		for ( int i = 0; i < 3; i++ ) {
+		std::vector<Cell> temp(1, Cell(WHITE, block));
+		for ( int i = 0; i < 2; i++ ) {
 			icon->push_back(temp);
 		}
 	}

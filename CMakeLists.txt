@@ -5,6 +5,8 @@ project(MyProject)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 include_directories(include)
 file(GLOB_RECURSE HEADER_FILES "include/*.h" "include/*.hpp")
 file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.cc")

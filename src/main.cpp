@@ -2,9 +2,7 @@
 #include "controller.h"
 #include "view.h"
 #include <iostream>
-#include <stdlib.h>
 #include <string>
-#include <time.h>
 /**
  * Print my id
  * */
@@ -16,15 +14,12 @@ void PrintMyID(std::string studId) {
 }
 
 int main() {
-	// TODO
 	// Integrate the Simple MVC Pattern to run the program.
 
-	srand(time(NULL));
 	View view;
 	Controller controller(view);
 	controller.run();
 
-	// TODO
 	// change to your student ID.
 	PrintMyID("113703052");
 }
