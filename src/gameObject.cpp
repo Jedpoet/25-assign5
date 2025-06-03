@@ -2,8 +2,8 @@
 #include "environment.h"
 
 GameObject::GameObject() {
-	_pos = {rand() % (GAME_WINDOW_WIDTH - 2),
-	        rand() % (GAME_WINDOW_HEIGHT - 2)};
+	_pos = {rng.getInt(1, GAME_WINDOW_WIDTH - 2),
+	        rng.getInt(1, GAME_WINDOW_HEIGHT - 2)};
 }
 
 GameObject::~GameObject() {

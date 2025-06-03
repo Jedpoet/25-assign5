@@ -1,10 +1,9 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
+#include "RNG.h"
 #include "icon.h"
 #include "unit.h"
-#include <iostream>
-#include <vector>
 
 class GameObject {
 
@@ -19,6 +18,7 @@ class GameObject {
 
 	Position _pos;
 	Icon _icon;
+	RNG rng = RNG();
 };
 
 #endif

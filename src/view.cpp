@@ -40,6 +40,10 @@ View::View() {
 	resetLatest();
 }
 
+void View::readPlayerPos(Position pos) {
+	player_pos = pos;
+}
+
 void View::updateGameObject(GameObject *obj) {
 	Icon icon = obj->getIcon();
 	Position pos = obj->getPosition();
@@ -57,7 +61,7 @@ void View::updateGameObject(GameObject *obj) {
 			const Cell &cell = icon[dy][dx];
 			latest_map[row][col] = cell.ascii;
 			latest_bg_color[row][col] = cell.color;
-			latest_fg_color[row][col] = cell.color;
+			// latest_fg_color[row][col] = cell.color;
 		}
 	}
 }
@@ -127,6 +131,9 @@ void View::render() {
 	frame += '+' +
 	         std::string(GAME_WINDOW_WIDTH * GAME_WINDOW_CELL_WIDTH, '-') +
 	         "+\n";
+
+	std::cout << "player: " << player_pos.x() << " " << player_pos.y()
+	          << "  \n";
 
 	std::cout << "\033[H" << frame << std::flush;
 

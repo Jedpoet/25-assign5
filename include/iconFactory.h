@@ -9,5 +9,5 @@
 class IconFactory : public Icon {
   public:
 	IconFactory(){};
-	Icon *create_icon(RPSType type) const;
+	Icon *create_icon(RPSGameObject *) const;
 };

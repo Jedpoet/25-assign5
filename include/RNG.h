@@ -1,3 +1,6 @@
+#ifndef RNG_H
+#define RNG_H
+
 #include <random>
 
 class RNG {
@@ -13,3 +16,5 @@ class RNG {
   private:
 	std::mt19937 gen;
 };
+
+#endif

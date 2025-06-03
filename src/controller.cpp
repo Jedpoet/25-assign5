@@ -15,21 +15,30 @@ Controller::Controller(View &view) : _view(view) {
 	}
 	_objs = factory.get_objs();
 
+	player = 0;
+	nums[0] = 0;
+	nums[1] = 0;
+	nums[2] = 0;
+
 	for ( auto obj : _objs ) {
-		if ( auto rpsObj = dynamic_cast<RPSGameObject *>(obj) ) {
-			switch ( rng.getInt(1, 3) ) {
-			case 1:
-				rpsObj->setType(RPSType::ROCK);
-				players.push_back(rpsObj);
-				break;
-			case 2:
-				rpsObj->setType(RPSType::SCISSORS);
-				break;
-			case 3:
-				rpsObj->setType(RPSType::PAPER);
-				break;
-			}
+		switch ( rng.getInt(1, 3) ) {
+		case 1:
+			obj->setType(RPSType::ROCK);
+			nums[0]++;
+			break;
+		case 2:
+			obj->setType(RPSType::SCISSORS);
+			nums[1]++;
+			break;
+		case 3:
+			obj->setType(RPSType::PAPER);
+			nums[2]++;
+			break;
 		}
+	}
+	if ( nums[0] != 0 ) {
+		nextPlayer();
+		_objs[player]->playerSwitch();
 	}
 }
 
@@ -61,21 +70,67 @@ void Controller::run() {
 			obj->update();
 
 			_view.updateGameObject(obj);
+			_view.readPlayerPos(_objs[player]->getPosition());
 		}
 
 		// check collision
-		for ( GameObject *obj1 : _objs ) {
-			for ( GameObject *obj2 : _objs ) {
-				auto rpsObj1 = dynamic_cast<RPSGameObject *>(obj1);
-				auto rpsObj2 = dynamic_cast<RPSGameObject *>(obj2);
-				if ( !rpsObj1 || !rpsObj2 || rpsObj1 == rpsObj2 ) {
+		for ( auto *obj1 : _objs ) {
+			for ( auto *obj2 : _objs ) {
+				if ( obj1 == obj2 ) {
 					continue;
 				}
-				if ( rpsObj1->intersect(rpsObj2) ) {
-					rpsObj1->onCollision(rpsObj2);
-					rpsObj2->onCollision(rpsObj1);
+				int battle;
+				if ( obj1->intersect(obj2) ) {
+					battle = obj1->onCollision(obj2);
+					battle = obj2->onCollision(obj1);
+				}
+
+				switch ( battle ) {
+				case 1:
+					nums[0]++;
+					nums[1]--;
+					break;
+				case 2:
+					nums[1]++;
+					nums[2]--;
+					break;
+				case 3:
+					nums[2]++;
+					nums[0]--;
+					break;
+				case 4:
+					nums[0]++;
+					nums[1]--;
+					_objs[player]->playerSwitch();
+					nextPlayer();
+					_objs[player]->playerSwitch();
+					break;
+				default:
+					break;
 				}
 			}
+		}
+
+		int count = 0;
+		for ( int i = 0; i < 3; i++ ) {
+			if ( nums[i] == 0 ) {
+				count++;
+			}
+		}
+
+		if ( count == 2 ) {
+
+			if ( nums[0] != 0 ) {
+				std::cout << "ROCK ";
+			}
+			else if ( nums[1] != 0 ) {
+				std::cout << "SCISSORS ";
+			}
+			else if ( nums[2] != 0 ) {
+				std::cout << "PAPER ";
+			}
+			std::cout << "WIN!" << std::endl;
+			break;
 		}
 
 		_view.render();
@@ -103,43 +158,42 @@ void Controller::handleInput(int keyInput) {
 	switch ( keyInput ) {
 	case 'w':
 	case 'k':
-		players[player]->setDirection(Direction::UP);
+		_objs[player]->setDirection(Direction::UP);
 		break;
 	case 'a':
 	case 'h':
-		players[player]->setDirection(Direction::LEFT);
+		_objs[player]->setDirection(Direction::LEFT);
 		break;
 	case 's':
 	case 'j':
-		players[player]->setDirection(Direction::DOWN);
+		_objs[player]->setDirection(Direction::DOWN);
 		break;
 	case 'd':
 	case 'l':
-		players[player]->setDirection(Direction::RIGHT);
+		_objs[player]->setDirection(Direction::RIGHT);
 		break;
 	case 'q':
 	case 'y':
-		players[player]->setDirection(Direction::TOP_LIFT);
+		_objs[player]->setDirection(Direction::TOP_LIFT);
 		break;
 	case 'e':
 	case 'u':
-		players[player]->setDirection(Direction::TOP_RIGHT);
+		_objs[player]->setDirection(Direction::TOP_RIGHT);
 		break;
 	case 'z':
 	case 'b':
-		players[player]->setDirection(Direction::DOWN_LIFT);
+		_objs[player]->setDirection(Direction::DOWN_LIFT);
 		break;
 	case 'c':
 	case 'n':
-		players[player]->setDirection(Direction::DOWN_RIGHT);
+		_objs[player]->setDirection(Direction::DOWN_RIGHT);
 		break;
 
 	case 'x':
 	case 'o':
-		player++;
-		if ( player == players.size() ) {
-			player = 0;
-		}
+		_objs[player]->playerSwitch();
+		nextPlayer();
+		_objs[player]->playerSwitch();
 		break;
 
 	default:
@@ -149,6 +203,15 @@ void Controller::handleInput(int keyInput) {
 
 void Controller::update() {
 }
+
+void Controller::nextPlayer() {
+	while ( _objs[player++]->getType() != ROCK ) {
+		if ( player >= _objs.size() ) {
+			player = 0;
+		}
+	}
+}
+
 void reset_terminal() {
 	printf("\e[m");    // reset color changes
 	printf("\e[?25h"); // show cursor
